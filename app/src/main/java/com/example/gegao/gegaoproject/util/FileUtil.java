@@ -6,6 +6,8 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -185,6 +187,23 @@ public class FileUtil {
 			return null;
 		}
 
+	}
+
+	public void writeThreadDownLoadInfo(String fileName,int count) throws IOException {
+		File file = new File("1.txt");
+		FileWriter fileWriter = new FileWriter(file);
+		fileWriter.write(count+"");
+		fileWriter.flush();
+		fileWriter.close();
+	}
+
+	public int readThreadDownLoadInfo(String fileName) throws IOException {
+		File file = new File(fileName);
+		FileReader fileReader = new FileReader(file);
+		BufferedReader br = new BufferedReader(fileReader);
+		String readLine = br.readLine();
+		int valueOf = Integer.valueOf(readLine);
+		return valueOf;
 	}
 
 }

@@ -4,6 +4,8 @@ import android.os.Environment;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URL;
@@ -59,6 +61,11 @@ public class FileDownloadThread extends Thread {
 		RandomAccessFile rAccessFile = null;
 		byte[] buf = new byte[BUFF_SIZE];
 		URLConnection conn = null;
+		try {
+			FileReader fileReader = new FileReader(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		try {
 			conn = url.openConnection();
 			conn.setConnectTimeout(150000);// 设置超时
