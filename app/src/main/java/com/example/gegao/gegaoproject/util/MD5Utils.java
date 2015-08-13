@@ -1,9 +1,8 @@
-package com.qingxin.ising.utils;
+package com.example.gegao.gegaoproject.util;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;

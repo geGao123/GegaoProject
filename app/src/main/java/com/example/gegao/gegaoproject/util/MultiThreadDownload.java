@@ -1,5 +1,6 @@
 package com.example.gegao.gegaoproject.util;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
@@ -38,6 +39,11 @@ public class MultiThreadDownload extends Thread {
 	private boolean completed = false;
 	private Handler handler;
 
+	private final File downloadCacheDirectory;//续传时  上次下载的信息
+	private URL url;//conn的连接
+	private URLConnection conn;
+	private File saveFile;
+
 	/**
 	 * 下载的构造函数
 	 * 
@@ -49,6 +55,7 @@ public class MultiThreadDownload extends Thread {
 	 *            保存文件的路径
 	 */
 	public MultiThreadDownload(Handler handler, String url, String savePath) {
+		downloadCacheDirectory = Environment.getDownloadCacheDirectory();
 		this.handler = handler;
 		this.UrlStr = url;
 		this.savePath = savePath;
@@ -56,15 +63,33 @@ public class MultiThreadDownload extends Thread {
 
 	@Override
 	public void run() {
+
 		FileDownloadThread[] fds = new FileDownloadThread[threadNum];// 设置线程数量
+//==========================文件未下载完毕==========================
+		String recordFolderName = MD5Utils.getMD5String(UrlStr);
+		File recordFolder = new File(downloadCacheDirectory,recordFolderName);
+
+		if (recordFolder.exists() && recordFolder.isDirectory()){
+			for (int i = 0; i < threadNum; i++) {
+				int curThreadEndPosition = (i + 1) != threadNum ? ((i + 1) * blockSize - 1) : fileSize;
+				FileDownloadThread fdt = new FileDownloadThread(url, saveFile, i * blockSize, curThreadEndPosition);
+				fdt.setName("thread" + i);
+				fdt.start();
+				fds[i] = fdt;
+			}
+		}
+//==========================文件未下载完毕==========================
+
+//==========================文件第一次下载==========================
+
 		try {
-			URL url = new URL(UrlStr);
-			URLConnection conn = url.openConnection();
+			url = new URL(UrlStr);
+			conn = url.openConnection();
 			fileSize = conn.getContentLength();
 			this.fileName = FileUtil.getFileName(UrlStr);
 			// 只创建一个文件，saveFile下载内容
 			// File saveFile = new File(savePath + "/" + fileName);
-			File saveFile = new File(fileName);
+			saveFile = new File(fileName);
 			RandomAccessFile accessFile = new RandomAccessFile(saveFile, "rwd");
 			// 设置本地文件的长度和下载文件相同
 			accessFile.setLength(fileSize);

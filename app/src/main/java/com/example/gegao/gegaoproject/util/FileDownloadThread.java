@@ -1,5 +1,7 @@
 package com.example.gegao.gegaoproject.util;
 
+import android.os.Environment;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +29,8 @@ public class FileDownloadThread extends Thread {
 	private boolean downloadException = false;
 	/** 已经下载多少 */
 	private int downloadSize = 0;
+	private final File downloadCacheDirectory;
+
 
 	/***
 	 * 分块文件下载，可以创建多线程模式
@@ -46,6 +50,7 @@ public class FileDownloadThread extends Thread {
 		this.startPosition = startPosition;
 		this.curPosition = startPosition;
 		this.endPosition = endPosition;
+		downloadCacheDirectory = Environment.getDownloadCacheDirectory();
 	}
 
 	@Override
