@@ -31,7 +31,7 @@ public class FileDownloadThread extends Thread {
 	private boolean downloadException = false;
 	/** 已经下载多少 */
 	private int downloadSize = 0;
-	private final File downloadCacheDirectory;
+	private final String downloadCacheDirectory;
 
 
 	/***
@@ -46,13 +46,14 @@ public class FileDownloadThread extends Thread {
 	 * @param endPosition
 	 *            结束位置
 	 */
-	public FileDownloadThread(URL url, File file, int startPosition, int endPosition) {
+	public FileDownloadThread(URL url, File file, int startPosition, int endPosition,int hasDownloadSize,String path) {
 		this.url = url;
 		this.file = file;
 		this.startPosition = startPosition;
 		this.curPosition = startPosition;
 		this.endPosition = endPosition;
-		downloadCacheDirectory = Environment.getDownloadCacheDirectory();
+		this.downloadSize = hasDownloadSize;
+		downloadCacheDirectory = path;
 	}
 
 	@Override
@@ -86,6 +87,7 @@ public class FileDownloadThread extends Thread {
 				}
 				rAccessFile.write(buf, 0, len);
 				curPosition = curPosition + len;
+				FileUtil.writeThreadDownLoadInfo(downloadCacheDirectory,this.getName(),curPosition);
 				if (curPosition > endPosition) { // 如果下载多了，则减去多余部分
 					System.out.println("  curPosition > endPosition  !!!!");
 					int extraLen = curPosition - endPosition;
