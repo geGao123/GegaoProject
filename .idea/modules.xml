@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GegaoProject.iml" filepath="$PROJECT_DIR$/GegaoProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MVP/MVP.iml" filepath="$PROJECT_DIR$/MVP/MVP.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mvvm/mvvm.iml" filepath="$PROJECT_DIR$/mvvm/mvvm.iml" />
     </modules>
   </component>
 </project>
